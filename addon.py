@@ -36,10 +36,12 @@ activeAudioDeviceId = [index for (index, option) in enumerate(audioDeviceOptions
 if activeAudioDeviceId < 3:
 #disable passthrough for Analod/External USB @ Index 3
 	changeReq1 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.passthrough","value":%s},"id":1}' % "false")
+	changeReq2 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.stereoupmix","value":%s},"id":1}' % "true")
 	nextIndex = 3
 else:
 #enable passthrough for HDMI @ Index 2 (change as required, Default=0,PCM=1,HDMI=2)
 	changeReq1 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.passthrough","value":%s},"id":1}' % "true")
+	changeReq2 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.stereoupmix","value":%s},"id":1}' % "false")
 	nextIndex = 2
 
 nextValue = audioDeviceOptions[nextIndex]["value"]
