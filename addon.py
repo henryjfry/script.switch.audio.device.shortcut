@@ -1,4 +1,3 @@
-# bsl, 2016
 import xbmc
 import xbmcaddon
 import json
