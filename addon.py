@@ -30,7 +30,17 @@ activeAudioDeviceValue = audioSetting["value"];
 
 activeAudioDeviceId = [index for (index, option) in enumerate(audioDeviceOptions) if option["value"] == activeAudioDeviceValue][0];
 
-nextIndex = ( activeAudioDeviceId + 1 ) % len(audioDeviceOptions)
+#default cycle through sound devices
+#nextIndex = ( activeAudioDeviceId + 1 ) % len(audioDeviceOptions)
+#changed to switch between two devices and enable/disable passthrough as needed.
+if activeAudioDeviceId < 3:
+#disable passthrough for Analod/External USB @ Index 3
+	changeReq1 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.passthrough","value":%s},"id":1}' % "false")
+	nextIndex = 3
+else:
+#enable passthrough for HDMI @ Index 2 (change as required, Default=0,PCM=1,HDMI=2)
+	changeReq1 = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSettingValue","params":{"setting":"audiooutput.passthrough","value":%s},"id":1}' % "true")
+	nextIndex = 2
 
 nextValue = audioDeviceOptions[nextIndex]["value"]
 nextName = audioDeviceOptions[nextIndex]["label"]
@@ -39,6 +49,7 @@ changeReq =  xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Settings.SetSetting
 
 try:
 	changeResJson = json.loads(changeReq);
+	changeResJson1 = json.loads(changeReq1);
 
 	if changeResJson["result"] != True:
 		raise Exception
